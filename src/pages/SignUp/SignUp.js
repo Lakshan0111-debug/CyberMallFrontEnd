@@ -1,57 +1,118 @@
 import React, { useState } from 'react';
 import './SignUp.css';
+import Navbar from '../../components/Navbar/Navbar';
+import axios from 'axios';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    customerName: '',
     email: '',
-    password: '',
+    phoneNumber: '',
     address: '',
     nic: '',
-    phone: '',
+    userName: '',
+    password: ''
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  // Handle input change to update form data
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form data submitted:', formData);
+
+    const data = {
+      customerName: formData.customerName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      nic: formData.nic,
+      userName: formData.userName,
+      password: formData.password // Ensure password is lowercase
+    };
+
+    try {
+      await axios.post('http://localhost:8080/customers/addC', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      alert('Customer added successfully');
+    } catch (error) {
+      console.error('There was an error adding the customer:', error);
+    }
+
+    // Reset form fields after submission
+    setFormData({
+      customerName: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      nic: '',
+      userName: '',
+      password: ''
+    });
   };
 
   return (
     <div>
+      <Navbar />
       <div className="signup-container">
         <div className="signup-box">
           <h2>Sign Up</h2>
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              name="firstName"
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              value={formData.lastName}
-              onChange={handleChange}
+              name="customerName"
+              placeholder="Your Name"
+              value={formData.customerName}
+              onChange={handleInputChange}
               required
             />
             <input
               type="email"
               name="email"
-              placeholder="Your email"
+              placeholder="Your E-Mail"
               value={formData.email}
-              onChange={handleChange}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Your Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Your Address"
+              value={formData.address}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="text"
+              name="nic"
+              placeholder="Your NIC"
+              value={formData.nic}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="text"
+              name="userName"
+              placeholder="Username"
+              value={formData.userName}
+              onChange={handleInputChange}
               required
             />
             <input
@@ -59,31 +120,7 @@ const SignUp = () => {
               name="password"
               placeholder="Password"
               value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="address"
-              placeholder="Address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="nic"
-              placeholder="NIC"
-              value={formData.nic}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
             <button type="submit">Create account</button>

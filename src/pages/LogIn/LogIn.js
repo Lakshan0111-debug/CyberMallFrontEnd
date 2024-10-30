@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LogIn.css';
+import Navbar from '../../components/Navbar/Navbar';
 const LogIn = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -21,6 +22,7 @@ const LogIn = () => {
 
   return (
     <div>
+      <Navbar/>
       <div className="login-container">
         <div className="login-box">
           <h2>Log In</h2>

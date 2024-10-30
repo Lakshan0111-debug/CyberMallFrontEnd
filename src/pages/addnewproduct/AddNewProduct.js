@@ -2,11 +2,18 @@ import React, { useState } from "react";
 import "./AddNewProduct.css";
 import AdminSidebar from "../../components/adminsidebar/AdminSidebar";
 import AdminNavbar from "../../components/adminnavbar/AdminNavbar";
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { DriveFolderUploadOutlined, Close } from "@mui/icons-material";
+import axios from 'axios'; // Import Axios
 
 const AddNewProduct = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [formData, setFormData] = useState({
+    productName: "",
+    description: "",
+    supplierName: "",
+    unitPrice: "",
+    quantity: ""
+  });
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -21,36 +28,54 @@ const AddNewProduct = () => {
       newPreviews.push(URL.createObjectURL(file));
     }
 
-    // Limit to max 4 images
     if (newPreviews.length + imagePreviews.length > 4) {
       alert("You can only upload a maximum of 4 images.");
       return;
     }
 
-    setImagePreviews((prev) => [...prev, ...newPreviews].slice(0, 4)); // Ensure only 4 images
+    setImagePreviews((prev) => [...prev, ...newPreviews].slice(0, 4));
   };
 
-  const removeImage = (index) => {
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index)); // Remove image at the given index
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted with data:", {
-      images: imagePreviews,
-      // Gather other form data here...
+    
+    const data = new FormData();
+    data.append('file', e.target.fileInput.files[0]); // Only one file for now
+    data.append('productName', formData.productName);
+    data.append('description', formData.description);
+    data.append('supplierName', formData.supplierName);
+    data.append('unitPrice', formData.unitPrice);
+    data.append('quantity', formData.quantity);
+
+    try {
+      await axios.post('http://localhost:8080/products/addP', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      alert("Product added successfully");
+    } catch (error) {
+      console.error("There was an error adding the product:", error);
+    }
+
+    setImagePreviews([]);
+    setFormData({
+      productName: "productName",
+      description: "description",
+      supplierName: "supplierName",
+      unitPrice: "unitPrice",
+      quantity: "quantity"
     });
-    setImagePreviews([]); // Clear images after submission
-    e.target.reset(); // Resets the form fields
+    e.target.reset();
   };
-
-  const suppliers = ["None", "Supplier A", "Supplier B"];
-
-  // Prepare filled images for rendering (fill up to 4)
-  const filledImages = [...imagePreviews];
-  while (filledImages.length < 4) {
-    filledImages.push(null);
-  }
 
   return (
     <div className='addNewProduct'>
@@ -63,23 +88,12 @@ const AddNewProduct = () => {
         <div className='bottom'>
           <div className="left">
             <div className="imageGrid">
-              {filledImages.map((src, index) => (
+              {imagePreviews.map((src, index) => (
                 <div key={index} className="imageContainer">
-                  {src ? (
-                    <div className="imageWrapper">
-                      <img
-                        src={src}
-                        alt={`Uploaded Preview ${index + 1}`}
-                        className="imagePreview"
-                      />
-                      <Close 
-                        className="removeIcon" 
-                        onClick={() => removeImage(index)} 
-                      />
-                    </div>
-                  ) : (
-                    <ShoppingCartOutlinedIcon className="placeholder" />
-                  )}
+                  <div className="imageWrapper">
+                    <img src={src} alt={`Uploaded Preview ${index + 1}`} className="imagePreview" />
+                    <Close className="removeIcon" onClick={() => setImagePreviews(prev => prev.filter((_, i) => i !== index))} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -91,35 +105,31 @@ const AddNewProduct = () => {
                   <DriveFolderUploadOutlined className='uploadIcon'/>
                   <span>Choose Images (Max 4)</span>
                 </label>
-                <input type="file" id="fileInput" multiple onChange={handleImageChange} style={{ display: "none" }} required />
-              </div>
-              <div className='formInput'>
-                <label>Product ID</label>
-                <input type='number' id='PRODUCT_ID' name='productId' placeholder='Enter Product ID' required />
+                <input type="file" id="fileInput" multiple onChange={handleImageChange} style={{ display: "none" }} />
               </div>
               <div className='formInput'>
                 <label>Product Name</label>
-                <input type='text' id='PRODUCT_NAME' name='productName' placeholder='Enter Product Name' required />
+                <input type='text' name='productName' value={formData.productName} onChange={handleInputChange} placeholder='Enter Product Name' required />
               </div>
               <div className='formInput'>
                 <label>Product Description</label>
-                <input type='text' id='PRODUCT_DESCRIPTION' name='productDescription' placeholder='Enter Product Description' required />
+                <input type='text' name='description' value={formData.description} onChange={handleInputChange} placeholder='Enter Product Description' required />
               </div>
               <div className='formInput'>
                 <label>Supplier</label>
-                <select id='SUPPLIER_NAME' name='supplierName' required>
-                  {suppliers.map((supplier, index) => (
-                    <option key={index} value={supplier}>{supplier}</option>
-                  ))}
+                <select name='supplierName' value={formData.supplierName} onChange={handleInputChange} required>
+                  <option value="">None</option>
+                  <option value="Supplier A">Supplier A</option>
+                  <option value="Supplier B">Supplier B</option>
                 </select>
               </div>
               <div className='formInput'>
                 <label>Unit Price (LKR)</label>
-                <input type='number' id='UNIT_PRICE' name='unitPrice' placeholder='Enter Unit Price In LKR' required step="0.01" />
+                <input type='number' name='unitPrice' value={formData.unitPrice} onChange={handleInputChange} placeholder='Enter Unit Price In LKR' required />
               </div>
               <div className='formInput'>
                 <label>Quantity</label>
-                <input type='number' id='QUANTITY' name='quantity' placeholder='Enter Quantity' required />
+                <input type='number' name='quantity' value={formData.quantity} onChange={handleInputChange} placeholder='Enter Quantity' required />
               </div>
               <button type='submit'>Save</button>
             </form>

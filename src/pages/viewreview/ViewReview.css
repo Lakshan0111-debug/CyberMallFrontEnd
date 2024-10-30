@@ -1,8 +1,8 @@
-.viewProduct{
+.viewReview{
     width: 100%;
     display: flex;
 
-    .viewProductContainer{
+    .viewReviewContainer{
         flex: 6;
 
         .top{
@@ -36,19 +36,8 @@
                 align-items: center;
                 justify-content: center;
 
-                .imageGrid{
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 30px;
-
-                    .imagePreview{
-                        width: 100%;
-                        height: auto;
-                        display: block;
-                        object-fit: cover;
-                        border-radius: 10px;
-                        color: #a0afc1;
-                    }
+                .imageContainer{
+                    display: flex;
 
                     .placeholder{
                         display: flex;
@@ -72,7 +61,7 @@
                 .details{
                     display: flex;
                     margin: 40px;
-                    gap: 30px;
+                    gap: 20px;
                     align-items: center;
                     flex-direction: column;
 
@@ -88,19 +77,6 @@
                         .itemValue{
                             padding: 5px;
                         }
-                    }
-    
-                    button{
-                        position: relative;
-                        width: 150px;
-                        padding: 10px;
-                        margin: 10px 0;
-                        border: none;
-                        border-radius: 5px;
-                        background-color: #425060;
-                        color: white;
-                        font-weight: bold;
-                        cursor: pointer;
                     }
                 }
             }

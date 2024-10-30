@@ -1,0 +1,56 @@
+.editCustomer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 130vh;
+    background-color: #f0f0f0;
+  }
+  
+  .editCustomerProfile{
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    width: 500px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .editCustomerProfile h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .editCustomerProfile form {
+    width: 100%; /* Full width for the form to center elements inside it */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+  }
+  
+  .editCustomerProfile input {
+    width: 90%; /* Adjust width to be a little smaller for better spacing */
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .editCustomerProfile button {
+    width: 90%; /* Same width for the button to match input fields */
+    padding: 12px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .editCustomerProfile button:hover {
+    background-color: #e64a19;
+  }

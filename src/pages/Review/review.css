@@ -1,0 +1,90 @@
+.review-container {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin-top: 230px;
+    margin-left: 550px;
+    
+    
+  }
+  .A{
+    padding: 20px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); /* Larger container shadow */
+    border-radius: 10px;  /* Rounded corners for a smoother look */
+    
+  
+  }
+  .rating h2 {
+    margin-bottom: 10px;
+    margin-right: 130px;
+    
+  }
+  
+  .star {
+    font-size: 70px;
+    cursor: pointer;
+    color: lightgray;
+  }
+  
+  .star.filled {
+    color: gold;
+  }
+  
+  .comment {
+    margin-top: 20px;
+  }
+  
+  .comment textarea {
+    width: 90%;
+    height: 130px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
+    
+  }
+  
+  .submit-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #f47405;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    
+    
+    
+  }
+  
+  .submit-btn:hover {
+    background-color: #eda12e;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .thank-you-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* You can adjust the height as needed */
+    color: #eda12e;
+    font-size: 50px;
+  }
+  
+  .thank-you-message h2 {
+    margin: 0;
+    white-space: nowrap;  /* This prevents text from wrapping */
+    margin-top: 200px;
+    margin-left: 20px;
+    
+    
+  }
+  
+  

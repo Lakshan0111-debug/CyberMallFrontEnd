@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ForgotPassword.css';
+import Navbar from '../../components/Navbar/Navbar';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const ForgotPassword = () => {
 
   return (
     <div>
+      <Navbar/>
       <div className="forgot-container">
         <div className="forgot-box">
           <h2>Forgot Password</h2>

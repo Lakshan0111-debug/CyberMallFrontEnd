@@ -1,8 +1,8 @@
-.viewProduct{
+.viewSupplier{
     width: 100%;
     display: flex;
 
-    .viewProductContainer{
+    .viewSupplierContainer{
         flex: 6;
 
         .top{
@@ -36,15 +36,12 @@
                 align-items: center;
                 justify-content: center;
 
-                .imageGrid{
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 30px;
+                .imageContainer{
+                    display: flex;
 
                     .imagePreview{
-                        width: 100%;
-                        height: auto;
-                        display: block;
+                        width: 150px;
+                        height: 150px;
                         object-fit: cover;
                         border-radius: 10px;
                         color: #a0afc1;
@@ -72,7 +69,7 @@
                 .details{
                     display: flex;
                     margin: 40px;
-                    gap: 30px;
+                    gap: 20px;
                     align-items: center;
                     flex-direction: column;
 

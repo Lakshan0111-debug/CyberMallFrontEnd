@@ -1,0 +1,27 @@
+.home{
+    width: 95%;
+    margin: auto;
+    align-items: center;
+}
+
+.header-container{
+    margin-top: 120px;
+}
+
+@media (max-width:1050px){
+    .header-container{
+        margin-top: 100px;
+    }
+}
+
+@media (max-width:900px){
+    .header-container{
+        margin-top: 70px;
+    }
+}
+
+@media (max-width:750px){
+    .header-container{
+        margin-top: 70px;
+    }
+}
