@@ -1,0 +1,14 @@
+.latestOrders{
+    border: 1px #616161;
+
+    .tableHead{
+        background-color: paleturquoise;
+        color: #616161;
+        font-weight: bold;
+    }
+
+    .tableCell{
+        background-color: whitesmoke;
+        color: #616161;
+    }
+}

@@ -1,0 +1,67 @@
+.customersTable{
+    height: 500px;
+    padding: 20px;
+
+    .cellWithImg{
+        display: flex;
+        align-items: center;
+
+        .cellImg{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    }
+
+    .customersTableTitle{
+        display: flex;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+        color: #425060;
+        margin-bottom: 10px;
+        align-items: center;
+        justify-content: space-between;
+
+        .link{
+            color: green;
+            font-size: 15px;
+            font-weight: 500;
+            border: 2px solid green;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    }
+
+    .datagrid{
+        color: #616161;
+        -webkit-box-shadow: 2px 2px 5px 1px #425060;
+        box-shadow: 2px 2px 5px 1px #a0afc1;
+    }
+
+    .cellAction{
+        align-items: center;
+        display: flex;
+        gap: 15px;
+
+        .viewButton{
+            padding: 2px 5px;
+            border-radius: 5px;
+            color: darkblue;
+            border: 1px dotted blue;
+            cursor: pointer;
+        }
+
+        .deleteButton{
+            padding: 2px 5px;
+            border-radius: 5px;
+            color: crimson;
+            border: 1px dotted red;
+            cursor: pointer;
+        }
+    }
+}
