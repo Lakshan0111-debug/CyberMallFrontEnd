@@ -10,11 +10,14 @@ const InventoryTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/products");
-        const productsWithId = response.data.map((product) => ({
+        const response = await axios.get("http://localhost:8080/products/get-all");
+
+        // Ensure each product has a unique ID for the DataGrid
+        const productsWithId = response.data.map((product, index) => ({
           ...product,
-          id: product.productId,  // Ensure the correct field name
+          id: product.productId || `temp-id-${index}`, // Assign productId or generate a fallback ID
         }));
+
         setData(productsWithId);
       } catch (error) {
         console.error("Error fetching products data", error);
@@ -23,39 +26,21 @@ const InventoryTable = () => {
     fetchProducts();
   }, []);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      axios
-        .delete(`http://localhost:8080/products/${id}`)
-        .then(() => {
-          setData(data.filter((item) => item.id !== id));
-          alert("Product deleted successfully");
-        })
-        .catch((error) => {
-          console.error("There was an error deleting the product!", error);
-        });
+      try {
+        await axios.delete(`http://localhost:8080/products/delete-product/${id}`);
+        setData(data.filter((item) => item.id !== id));
+        alert("Product deleted successfully");
+      } catch (error) {
+        console.error("There was an error deleting the product!", error);
+      }
     }
   };
 
   const productColumns = [
-    { field: "id", headerName: "Product ID", width: 100 }, 
-    {
-      field: "productName",  
-      headerName: "Product",
-      width: 230,
-      // renderCell: (params) => {
-      //   return (
-      //     <div className="cellWithImg">
-      //       <img
-      //         className="cellImg"
-      //         src={params.row.imageName ? `/path/to/images/${params.row.imageName}` : 'default-image.png'}
-      //         alt="Product Image"
-      //       />
-      //       {params.row.productName || "No Product Name"}
-      //     </div>
-      //   );
-      // },
-    },
+    { field: "id", headerName: "Product ID", width: 100 },
+    { field: "productName", headerName: "Product", width: 230 },
     { field: "description", headerName: "Description", width: 180 },
     { field: "supplierName", headerName: "Supplier", width: 180 },
     { field: "unitPrice", headerName: "Unit Price (LKR)", width: 150 },
@@ -67,19 +52,16 @@ const InventoryTable = () => {
       field: "action",
       headerName: "Action",
       width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            <Link
-              to={`/manageInventory/${params.row.id}`}  // Use "id" as it should be unique
-              style={{ textDecoration: "none" }}
-            >
-              <div className="viewButton">VIEW</div>
-            </Link>
-            <div className="deleteButton" onClick={() => handleDelete(params.row.id)}>DELETE</div>
+      renderCell: (params) => (
+        <div className="cellAction">
+          <Link to={`/manageInventory/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <div className="viewButton">VIEW</div>
+          </Link>
+          <div className="deleteButton" onClick={() => handleDelete(params.row.id)}>
+            DELETE
           </div>
-        );
-      },
+        </div>
+      ),
     },
   ];
 
@@ -97,7 +79,7 @@ const InventoryTable = () => {
         columns={productColumns.concat(actionColumn)}
         pageSize={7}
         rowsPerPageOptions={[5]}
-        getRowId={(row) => row.id} // Ensure DataGrid uses the correct unique id
+        getRowId={(row) => row.id} // Use id property in each row
       />
     </div>
   );
