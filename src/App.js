@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     element: <AddNewProduct/>,
   },
   {
-    path: "/manageInventory/productId",
+    path: "/manageInventory/:productId",
     element: <ViewProduct/>,
   },
   {

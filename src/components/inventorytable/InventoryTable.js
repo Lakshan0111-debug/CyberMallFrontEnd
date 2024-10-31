@@ -15,7 +15,7 @@ const InventoryTable = () => {
         // Ensure each product has a unique ID for the DataGrid
         const productsWithId = response.data.map((product, index) => ({
           ...product,
-          id: product.productId || `temp-id-${index}`, // Assign productId or generate a fallback ID
+          id: product.productId || `${index}`, // Assign productId or generate a fallback ID
         }));
 
         setData(productsWithId);

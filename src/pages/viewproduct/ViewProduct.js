@@ -14,6 +14,7 @@ const ViewProduct = () => {
     const [supplierName, setSupplierName] = useState('');
     const [unitPrice, setUnitPrice] = useState('');
     const [quantity, setQuantity] = useState('');
+    const [filledImages, setFilledImages] = useState([]); // Define filledImages
 
     useEffect(() => {
         loadProductDetails();
@@ -21,12 +22,16 @@ const ViewProduct = () => {
 
     async function loadProductDetails() {
         try {
-            const response = await axios.get(`http://localhost:8080/products/${productId}`);
+            const response = await axios.get(`http://localhost:8080/products/search-product/${productId}`);
+            console.log("API Response:", response.data); // Log API response
+
             const productData = response.data;
-            setProductName(productData.productName);
-            setSupplierName(productData.supplierName);
-            setUnitPrice(productData.unitPrice);
-            setQuantity(productData.quantity);
+
+            setProductName(productData.productName || 'N/A');
+            setSupplierName(productData.supplierName || 'N/A');
+            setUnitPrice(productData.unitPrice || 'N/A');
+            setQuantity(productData.quantity || 'N/A');
+            setFilledImages(productData.images || []);
         }
         catch (error) {
             console.error("Error fetching product details:", error);
@@ -46,22 +51,22 @@ const ViewProduct = () => {
                     <h1>VIEW PRODUCT</h1>
                 </div>
                 <div className='bottom'>
-                    {/*<div className="left">
+                    <div className="left">
                         <div className="imageGrid">
-                            {filledImages.map((src, index) => (
-                                src ? (
+                            {filledImages.length > 0 ? (
+                                filledImages.map((src, index) => (
                                     <img
                                         key={index}
-                                        src={src}
+                                        src={src.includes('data:image') ? src : `data:image/jpeg;base64,${src}`}
                                         alt={`Uploaded Preview ${index + 1}`}
                                         className="imagePreview"
                                     />
-                                ) : (
-                                    <ShoppingCartOutlinedIcon key={index} className="placeholder" />
-                                )
-                            ))}
+                                ))
+                            ) : (
+                                <ShoppingCartOutlinedIcon className="placeholder" />
+                            )}
                         </div>
-                    </div>*/}
+                    </div>
                     <div className="right">
                         <div className="details">
                             <div className="detailItem">
