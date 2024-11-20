@@ -75,6 +75,8 @@ const Review = () => {
         setRating(0);
         setHover(0);
         setComment("")
+        
+        
     }
     
 
