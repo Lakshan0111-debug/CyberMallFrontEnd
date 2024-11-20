@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Logo from '../../assets/CyberMallLogo.png';
 import { Person2Outlined, ShoppingBasketOutlined } from '@mui/icons-material';
+import { StoreContext } from '../../context/StoreContext';
 
 const Navbar = ({setShowLogin}) => {
 
   const [menu,setMenu] = useState("category")
+
+  const {getTotalCartAmount} = useContext(StoreContext);
 
   return (
     <div className="navbar dark-nav">
@@ -21,6 +24,7 @@ const Navbar = ({setShowLogin}) => {
       <div className='navbar-right'>
         <div className='navbar-cart-icon'>
           <Link to='/cart'><ShoppingBasketOutlined/></Link>
+          <div className={getTotalCartAmount()?'dot':''}></div>
         </div>
         <Link to='/logIn'><button>Sign Up</button></Link>
         <div className='profileImg'>
