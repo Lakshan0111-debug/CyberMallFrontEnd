@@ -1,80 +1,135 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './pages/Home/Home';
 import SignUp from './pages/SignUp/SignUp';
 import LogIn from './pages/LogIn/LogIn';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import Review from './pages/Review/Review';
 import AdminDashboard from "./pages/admindashboard/AdminDashboard";
 import ManageInventory from './pages/manageinventory/ManageInventory';
 import AddNewProduct from './pages/addnewproduct/AddNewProduct';
-import ManageCustomers from "./pages/managecustomers/ManageCustomers";
-import ManageSuppliers from './pages/managesuppliers/ManageSuppliers';
-import AddNewSupplier from './pages/addnewsupplier/AddNewSupplier';
-import ManageOrders from './pages/manageorders/ManageOrders';
-import ManageReviews from './pages/managereviews/ManageReviews';
 import ViewProduct from './pages/viewproduct/ViewProduct';
 import UpdateProduct from './pages/updateproduct/UpdateProduct';
+import ManageCustomers from "./pages/managecustomers/ManageCustomers";
+import ViewCustomer from './pages/viewcustomer/ViewCustomer';
+import ManageSuppliers from './pages/managesuppliers/ManageSuppliers';
+import AddNewSupplier from './pages/addnewsupplier/AddNewSupplier';
+import ViewSupplier from './pages/viewsupplier/ViewSupplier';
+import UpdateSupplier from './pages/updatesupplier/UpdateSupplier';
+import ManageOrders from './pages/manageorders/ManageOrders';
+import ViewOrder from './pages/vieworder/ViewOrder';
+import ManageReviews from './pages/managereviews/ManageReviews';
+import ViewReview from './pages/viewreview/ViewReview';
+import Cart from './pages/Cart/Cart';
+import PlaceOrder from './pages/PlaceOrder/PlaceOrder';
+import CustomerProfile from './pages/customerprofile/CustomerProfile';
+import EditCustomerProfile from './pages/editcustomerprofile/EditCustomerProfile';
+import StoreContextProvider from './context/StoreContext.js';
 
 const router = createBrowserRouter([
-
+  {
+    path: "/",
+    element: <Home />
+  },
   {
     path: "/signUp",
-    element: <SignUp/>
+    element: <SignUp />
   },
   {
     path: "/logIn",
-    element: <LogIn/>
+    element: <LogIn />
   },
   {
     path: "/forgotPassword",
-    element: <ForgotPassword/>
+    element: <ForgotPassword />
   },
-
+  {
+    path: "/customerProfile/:customerId",
+    element: <CustomerProfile />
+  },
+  {
+    path: "/customerProfile/:customerId/updateProfile",
+    element: <EditCustomerProfile />
+  },
+  {
+    path: "/review",
+    element: <Review />
+  },
+  {
+    path: "/cart",
+    element: <Cart />
+  },
+  {
+    path: "/placeOrder",
+    element: <PlaceOrder />
+  },
   {
     path: "/adminDashboard",
-    element: <AdminDashboard/>
+    element: <AdminDashboard />
   },
   {
     path: "/manageInventory",
-    element: <ManageInventory/>,
+    element: <ManageInventory />
   },
   {
     path: "/manageInventory/addNew",
-    element: <AddNewProduct/>,
+    element: <AddNewProduct />
   },
   {
     path: "/manageInventory/:productId",
     element: <ViewProduct/>,
+
   },
   {
-    path: "/manageInventory/productId/updateProduct",
-    element: <UpdateProduct/>,
+    path: "/manageInventory/:productId/updateProduct",
+    element: <UpdateProduct />
   },
   {
     path: "/manageCustomers",
-    element: <ManageCustomers/>,
+    element: <ManageCustomers />
+  },
+  {
+    path: "/manageCustomers/:customerId",
+    element: <ViewCustomer />
   },
   {
     path: "/manageSuppliers",
-    element: <ManageSuppliers/>,
+    element: <ManageSuppliers />
   },
   {
     path: "/manageSuppliers/addNew",
-    element: <AddNewSupplier/>,
+    element: <AddNewSupplier />
+  },
+  {
+    path: "/manageSuppliers/:supplierId",
+    element: <ViewSupplier />
+  },
+  {
+    path: "/manageSuppliers/:supplierId/updateSupplier",
+    element: <UpdateSupplier />
   },
   {
     path: "/manageOrders",
-    element: <ManageOrders/>,
+    element: <ManageOrders />
+  },
+  {
+    path: "/manageOrders/:orderId",
+    element: <ViewOrder />
   },
   {
     path: "/manageReviews",
-    element: <ManageReviews/>,
+    element: <ManageReviews />
+  },
+  {
+    path: "/manageReviews/:reviewId",
+    element: <ViewReview />
   },
 ]);
 
 function App() {
   return (
-    <div>
+    <StoreContextProvider> {/* Wrap the RouterProvider with StoreContextProvider */}
       <RouterProvider router={router} />
-    </div>
+    </StoreContextProvider>
   );
 }
 
