@@ -39,7 +39,7 @@ const SuppliersTable = () => {
   };
 
   const supplierColumns = [
-    { field: "productId", headerName: "Supplier ID", width: 100 },
+    { field: "supplierId", headerName: "Supplier ID", width: 100 },
     {
       field: "supplierName",
       headerName: "Supplier",

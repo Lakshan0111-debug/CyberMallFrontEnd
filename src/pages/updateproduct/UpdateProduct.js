@@ -25,7 +25,7 @@ const UpdateProduct = () => {
 
   const loadProductDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/products/${productId}`);
+      const response = await axios.get(`http://localhost:8080/update-product/${productId}`);
       const product = response.data;
       setProductName(product.productName);
       setProductDescription(product.description);
