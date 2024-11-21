@@ -11,18 +11,17 @@ const Review = () => {
     const [reviews, setReviews] = useState([]); 
     const [editIndex, setEditIndex] = useState(null); 
 
-    useEffect(() =>{
+    useEffect(() => {
         loadReview();
-    },[])
+    }, []);
 
-    async function loadReview () {
+    async function loadReview() {
         try {
-           const response = await axios.get(`http://localhost:8080/api/v1/review`);
-           setReviews(response.data);
+            const response = await axios.get(`http://localhost:8080/api/v1/review`);
+            setReviews(response.data);
         } catch (error) {
-           console.log(error) 
+            console.log(error);
         }
-        
     }
 
     const handleRatingClick = (value) => {
@@ -38,24 +37,32 @@ const Review = () => {
         setComment(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
+        if (rating === 0) {
+            setErrorMessage('Rating is required.');
+            return;
+        }
+
         const data = {
             rating: rating,
             comment: comment
         };
+
         try {
-            await axios.post(`http://localhost:8080/api/v1/review`,data)
-            loadReview()
+            await axios.post(`http://localhost:8080/api/v1/review`, data);
+            loadReview();
             setSubmitted(true);
             setRating(0);
             setHover(0);
             setComment('');
             setErrorMessage('');
+            
+            
+            setTimeout(() => setSubmitted(false), 2000);
         } catch (error) {
             console.log(error.response.data);
         }
-
-        }
+    };
 
     async function editReview(review) {
         setEditIndex(review);
@@ -64,36 +71,39 @@ const Review = () => {
     }
 
     async function updateReview() {
+        if (rating === 0) {
+            setErrorMessage('Rating is required.');
+            return;
+        }
+
         const data = {
             rating: rating,
             comment: comment
         };
 
-        await axios.put('http://localhost:8080/api/v1/review/'+editIndex?.id, data)
-        setEditIndex(null);
-        loadReview();
-        setRating(0);
-        setHover(0);
-        setComment("")
-        
-        
+        try {
+            await axios.put(`http://localhost:8080/api/v1/review/${editIndex?.id}`, data);
+            setEditIndex(null);
+            loadReview();
+            setRating(0);
+            setHover(0);
+            setComment('');
+        } catch (error) {
+            console.log(error.response.data);
+        }
     }
-    
 
-    const handleDelete = async(id) => {
+    const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this review?");
         if (confirmDelete) {
-            try{
+            try {
                 await axios.delete(`http://localhost:8080/api/v1/review/${id}`);
                 loadReview();
-            }
-            catch (error){
-                console.error("error deleting product",error);
-                
+            } catch (error) {
+                console.error("Error deleting review", error);
             }
         }
     };
-    
 
     return (
         <div className="review-container">
@@ -104,7 +114,7 @@ const Review = () => {
             )}
 
             <div className="A">
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div className="rating">
                         <h2>{editIndex !== null ? 'Edit Your Review:' : 'Your Review:'}</h2>
                         {[1, 2, 3, 4, 5].map((value) => (
@@ -122,32 +132,27 @@ const Review = () => {
                         <textarea
                             value={comment}
                             onChange={handleCommentChange}
-                            placeholder="Write your comment here..."
+                            placeholder="Write your comment here (optional)..."
                         />
                     </div>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                 </form>
             </div>
 
-    {editIndex ? (
-        <>
-            <button type="submit" className="submit-btn" onClick={updateReview}>
-                Update Review
-            </button>
-        </>
-    ) : (
-        <>
-            <button type="submit" className="submit-btn" onClick={handleSubmit}>
-                Submit Review
-            </button>
-        </>
-    )
-    }
-            
+            {editIndex ? (
+                <button className="submit-btn" onClick={updateReview}>
+                    Update Review
+                </button>
+            ) : (
+                <button className="submit-btn" onClick={handleSubmit}>
+                    Submit Review
+                </button>
+            )}
+
             <div className="review-table">
-                    <div className='aaa'>
-                        <h2>Submitted Reviews:</h2>
-                    </div>
+                <div className="aaa">
+                    <h2>Submitted Reviews:</h2>
+                </div>
                 <table>
                     <thead>
                         <tr>
