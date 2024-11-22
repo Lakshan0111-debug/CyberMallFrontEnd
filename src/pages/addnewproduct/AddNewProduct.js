@@ -56,13 +56,16 @@ const AddNewProduct = () => {
     data.append('quantity', formData.quantity);
 
     try {
-      await axios.post('http://localhost:8080/products/addP', data, {
+      await axios.post('http://localhost:8080/products/add-product', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      navigate(`/manageInventory`)
       alert("Product added successfully");
-    } catch (error) {
+    } 
+
+    catch (error) {
       console.error("There was an error adding the product:", error);
     }
 
