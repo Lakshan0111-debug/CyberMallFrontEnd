@@ -28,6 +28,23 @@ const OrdersTable = () => {
     fetchOrders();
   }, []); 
 
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to reject this order?")) {
+        axios
+            .delete(`http://localhost:8080/orders/delete-order/${id}`)
+            .then(() => {
+                // Update the data state by filtering out the deleted order
+                setData((prevData) => prevData.filter((item) => item.orderId !== id));
+                alert("Order rejected successfully!");
+            })
+            .catch((error) => {
+                console.error("There was an error rejecting the order:", error);
+                alert("Failed to reject the order. Please try again later.");
+            });
+    }
+};
+
+
   const orderColumns = [
     { field: "id", headerName: "Order ID", width: 100 },
     { field: "customerName", headerName: "Customer", width: 180 },
@@ -49,7 +66,7 @@ const OrdersTable = () => {
             <Link to={`/manageOrders/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">VIEW</div>
             </Link>
-            <div className="rejectButton">REJECT</div>
+            <div className="rejectButton" onClick={() => handleDelete(params.row.id)}>REJECT</div>
           </div>
         );
       },
