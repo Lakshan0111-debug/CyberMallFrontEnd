@@ -1,182 +1,191 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Add missing imports
+import { useParams, useNavigate } from "react-router-dom";
 import "./UpdateProduct.css";
 import AdminSidebar from "../../components/adminsidebar/AdminSidebar";
 import AdminNavbar from "../../components/adminnavbar/AdminNavbar";
-// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { DriveFolderUploadOutlined, Close } from "@mui/icons-material";
+import { DriveFolderUploadOutlined, Close, Description } from "@mui/icons-material";
 import axios from "axios";
 
 const UpdateProduct = () => {
   const { productId } = useParams();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
- 
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [unitPrice, setUnitPrice] = useState('');
   const [quantity, setQuantity] = useState('');
-  // const [images, setImages] = useState([]); 
+  const [image, setImage] = useState(null);  // Single image state initialized as null
 
+  // Load the product details when the component mounts
   useEffect(() => {
     loadProductDetails();
   }, [productId]);
 
+  // Fetch the product details from the backend
   const loadProductDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/update-product/${productId}`);
+      const response = await axios.get(`http://localhost:8080/products/search-product/${productId}`);
       const product = response.data;
+      console.log("Product Details:", product);
+      
       setProductName(product.productName);
       setProductDescription(product.description);
       setSupplierName(product.supplierName);
       setUnitPrice(product.unitPrice);
       setQuantity(product.quantity);
 
+      // Check if image is returned and set it
+      if (product.image) {
+        setImage(product.image);  // Assuming product.image is a URL or base64 string
+      } else {
+        setImage(null);
+      }
     } catch (error) {
       console.error("Error fetching product details:", error);
     }
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const updatedProduct = {productId: parseInt(productId),productName,productDescription,supplierName,unitPrice,quantity
-    };
+    const formData = new FormData();
+    formData.append("productName", productName);
+    formData.append("productDescription", productDescription);
+    formData.append("supplierName", supplierName);
+    formData.append("unitPrice", unitPrice);
+    formData.append("quantity", quantity);
 
-    console.log('Updating product with data:', updatedProduct);
+    // If an image is selected, append it to the formData
+    if (image instanceof File) {
+      formData.append("image", image);  // Add the file object to the FormData
+    }
 
-    axios.put(`http://localhost:8080/products/${productId}`, updatedProduct)
+    // Send the form data as a PUT request
+    axios.put(`http://localhost:8080/products/update-product/${productId}`, formData)
       .then(response => {
         console.log('Product details updated:', response.data);
         navigate('/manageInventory');
       })
       .catch(error => {
-        console.error("There was an error updating the product!", error);
+        console.error("There was an error updating the product!", error.response || error.message);
       });
   };
 
+  // Handle image change (selecting an image)
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];  
+    if (file) {
+      const objectURL = URL.createObjectURL(file);  
+      setImage(file);  // Store the file instead of objectURL for FormData
+    }
+  };
 
-  // const handleImageChange = (e) => {
-  //   const files = Array.from(e.target.files);
-  //   setImages(files.map(file => URL.createObjectURL(file))); // Preview images
-  // };
-
-
-  // const removeImage = (index) => {
-  //   const newImages = [...images];
-  //   newImages.splice(index, 1); 
-  //   setImages(newImages);
-  // };
-
-  // General input change handler for text inputs
-
+  // Remove the image
+  const removeImage = () => {
+    setImage(null);  
+  };
 
   return (
-    <div className='editProduct'>
+    <div className="editProduct">
       <AdminSidebar />
-      <div className='editProductContainer'>
+      <div className="editProductContainer">
         <AdminNavbar />
-        <div className='top'>
+        <div className="top">
           <h1>EDIT PRODUCT</h1>
         </div>
-        <div className='bottom'>
+        <div className="bottom">
           <div className="left">
-            {/* <div className="imageGrid">
-              {images.map((src, index) => (
-                <div key={index} className="imageContainer">
-                  {src ? (
-                    <div className="imageWrapper">
-                      <img
-                        src={src}
-                        alt={`Uploaded Preview ${index + 1}`}
-                        className="imagePreview"
-                      />
-                      <Close
-                        className="removeIcon"
-                        onClick={() => removeImage(index)}
-                      />
-                    </div>
-                  ) : (
-                    <ShoppingCartOutlinedIcon className="placeholder" />
-                  )}
+            <div className="imageGrid">
+              {image ? (
+                <div className="imageWrapper">
+                  <img
+                    src={image instanceof File ? URL.createObjectURL(image) : image}  // Check if file or base64 string
+                    alt="Uploaded Preview"
+                    className="imagePreview"  // Apply fixed size via CSS
+                  />
+                  <Close
+                    className="removeIcon"
+                    onClick={removeImage}  // Remove image handler
+                  />
                 </div>
-              ))}
-            </div> */}
+              ) : (
+                <div className="placeholder">
+                  <p>No Image Available</p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className='right'>
+          <div className="right">
             <form onSubmit={handleSubmit}>
               <div className="formInput">
-                {/* <label htmlFor='fileInput' className='fileUploadLabel'>
-                  <DriveFolderUploadOutlined className='uploadIcon' />
-                  <span>Choose Images (Max 4)</span>
+                <label htmlFor="fileInput" className="fileUploadLabel">
+                  <DriveFolderUploadOutlined className="uploadIcon" />
+                  <span>Choose Image</span>
                 </label>
                 <input
                   type="file"
                   id="fileInput"
-                  multiple
-                  onChange={handleImageChange}
+                  onChange={handleImageChange}  // Handle image change
                   style={{ display: "none" }}
-                /> */}
+                />
               </div>
-              <div className='formInput'>
+              <div className="formInput">
                 <label>Product Name</label>
                 <input
-                  type='text'
-                  name='productName'
+                  type="text"
+                  name="productName"
                   value={productName}
-                  onChange={(e)=> setProductName(e.target.value)}
-                  placeholder='Enter Product Name'
+                  onChange={(e) => setProductName(e.target.value)}
+                  placeholder="Enter Product Name"
                   required
                 />
               </div>
-              <div className='formInput'>
+              <div className="formInput">
                 <label>Product Description</label>
                 <input
-                  type='text'
-                  name='productDescription'
+                  type="text"
+                  name="productDescription"
                   value={productDescription}
-                  onChange={(e)=> setProductDescription(e.target.value)}
-                  placeholder='Enter Product Description'
+                  onChange={(e) => setProductDescription(e.target.value)}
+                  placeholder="Enter Product Description"
                   required
                 />
               </div>
-              <div className='formInput'>
+              <div className="formInput">
                 <label>Supplier</label>
                 <input
-                  name='supplierName'
+                  name="supplierName"
                   value={supplierName}
-                  onChange={(e)=> setSupplierName(e.target.value)}
+                  onChange={(e) => setSupplierName(e.target.value)}
                   required
-                >
-                </input>
+                />
               </div>
-              <div className='formInput'>
+              <div className="formInput">
                 <label>Unit Price (LKR)</label>
                 <input
-                  type='number'
-                  name='unitPrice'
+                  type="number"
+                  name="unitPrice"
                   value={unitPrice}
-                  onChange={(e)=> setUnitPrice(e.target.value)}
-                  placeholder='Enter Unit Price In LKR'
+                  onChange={(e) => setUnitPrice(e.target.value)}
+                  placeholder="Enter Unit Price In LKR"
                   required
                   step="0.01"
                 />
               </div>
-              <div className='formInput'>
+              <div className="formInput">
                 <label>Quantity</label>
                 <input
-                  type='number'
-                  name='quantity'
+                  type="number"
+                  name="quantity"
                   value={quantity}
-                  onChange={(e)=> setQuantity(e.target.value)}
-                  placeholder='Enter Quantity'
+                  onChange={(e) => setQuantity(e.target.value)}
+                  placeholder="Enter Quantity"
                   required
                 />
               </div>
-              <button type='submit'>
-                Update Product
-              </button>
+              <button type="submit">Update Product</button>
             </form>
           </div>
         </div>

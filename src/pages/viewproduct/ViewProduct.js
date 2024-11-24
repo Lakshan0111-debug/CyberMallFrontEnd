@@ -31,7 +31,13 @@ const ViewProduct = () => {
             setSupplierName(productData.supplierName || 'N/A');
             setUnitPrice(productData.unitPrice || 'N/A');
             setQuantity(productData.quantity || 'N/A');
-            setFilledImages(productData.images || []);
+
+            // If the image exists, set the image(s) in state
+            if (productData.image) {
+                setFilledImages([productData.image]); // Store base64 image string in array for uniformity
+            } else {
+                setFilledImages([]);
+            }
         }
         catch (error) {
             console.error("Error fetching product details:", error);
@@ -54,16 +60,19 @@ const ViewProduct = () => {
                     <div className="left">
                         <div className="imageGrid">
                             {filledImages.length > 0 ? (
-                                filledImages.map((src, index) => (
+                                filledImages.map((base64Image, index) => (
                                     <img
                                         key={index}
-                                        src={src.includes('data:image') ? src : `data:image/jpeg;base64,${src}`}
+                                        src={`data:image/jpeg;base64,${base64Image}`} // Display base64-encoded image
                                         alt={`Uploaded Preview ${index + 1}`}
                                         className="imagePreview"
                                     />
                                 ))
                             ) : (
-                                <ShoppingCartOutlinedIcon className="placeholder" />
+                                <div className="placeholder">
+                                    <ShoppingCartOutlinedIcon className="icon" />
+                                    <p>No Images Available</p>
+                                </div>
                             )}
                         </div>
                     </div>
