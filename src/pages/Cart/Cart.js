@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Cart = () => {
-  const { cartItems, products_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
+  const { cartItems, products_list, addToCart, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
   const navigate = useNavigate();
   const [customerInfo, setCustomerInfo] = useState({
     // firstName: '',
@@ -46,7 +46,6 @@ const Cart = () => {
       totalPrice: getTotalCartAmount(),
       noOfItems: Object.values(cartItems).reduce((acc, quantity) => acc + quantity, 0),
       dateTime: new Date().toLocaleString(),
-      orderDe
     };
 
     // const customer = {
