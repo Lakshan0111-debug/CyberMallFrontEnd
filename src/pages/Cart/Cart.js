@@ -46,6 +46,7 @@ const Cart = () => {
       totalPrice: getTotalCartAmount(),
       noOfItems: Object.values(cartItems).reduce((acc, quantity) => acc + quantity, 0),
       dateTime: new Date().toLocaleString(),
+      orderDe
     };
 
     // const customer = {
@@ -186,7 +187,7 @@ const Cart = () => {
                 <b>LKR.{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
               </div>
             </div>
-            <button type="button" onClick={handlePlaceOrder}>PROCEED TO PAYMENT</button>
+            <button type="button" onClick={handlePlaceOrder}>Place Order</button>
           </div>
         </div>
       </form>
