@@ -38,14 +38,20 @@ const SignUp = () => {
     };
 
     try {
-      await axios.post('http://localhost:8080/customers/addC', data, {
+      await axios.post('http://localhost:8080/user/signup', data,{
         headers: {
           'Content-Type': 'application/json'
         }
       });
       alert('Customer added successfully');
     } catch (error) {
-      console.error('There was an error adding the customer:', error);
+      // Check if the error has a response and display it
+      if (error.response && error.response.data) {
+        alert(error.response.data); // Show the error message from the backend
+      } else {
+        console.error('Unexpected error:', error);
+        alert('An unexpected error occurred. Please try again.');
+      }
     }
 
     // Reset form fields after submission
