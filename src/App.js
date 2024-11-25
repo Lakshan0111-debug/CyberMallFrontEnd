@@ -20,7 +20,6 @@ import ViewOrder from './pages/vieworder/ViewOrder';
 import ManageReviews from './pages/managereviews/ManageReviews';
 import ViewReview from './pages/viewreview/ViewReview';
 import Cart from './pages/Cart/Cart';
-import PlaceOrder from './pages/PlaceOrder/PlaceOrder';
 import CustomerProfile from './pages/customerprofile/CustomerProfile';
 import EditCustomerProfile from './pages/editcustomerprofile/EditCustomerProfile';
 import StoreContextProvider from './context/StoreContext.js';
@@ -57,10 +56,6 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />
-  },
-  {
-    path: "/placeOrder",
-    element: <PlaceOrder />
   },
   {
     path: "/adminDashboard",
