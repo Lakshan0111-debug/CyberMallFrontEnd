@@ -26,6 +26,7 @@ const Navbar = ({setShowLogin}) => {
           <Link to='/cart'><ShoppingBasketOutlined/></Link>
           <div className={getTotalCartAmount()?'dot':''}></div>
         </div>
+        <Link to='/review'><button>Review Website</button></Link>
         <Link to='/logIn'><button>Sign Up</button></Link>
         <div className='profileImg'>
           <Link to='/customerProfile/customerId'><Person2Outlined/></Link>

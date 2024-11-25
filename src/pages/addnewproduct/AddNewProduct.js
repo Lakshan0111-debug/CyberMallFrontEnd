@@ -55,7 +55,7 @@ const AddNewProduct = () => {
       return;
     }
 
-    data.append("file", fileInput); // Append single file
+    data.append("image", fileInput); // Append single file
     data.append("productId", formData.productId);
     data.append("productName", formData.productName);
     data.append("description", formData.description);
