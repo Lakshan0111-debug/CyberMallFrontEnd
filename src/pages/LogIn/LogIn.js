@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import './LogIn.css';
 import Navbar from '../../components/Navbar/Navbar';
+import axios from 'axios';
+
+
+
+
 const LogIn = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -14,10 +19,32 @@ const LogIn = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Log In form submitted:', formData);
+  
+    try {
+      // Send login request to the backend
+      const response = await axios.post('http://localhost:8080/user/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      // Handle success response
+      alert(response.data); // "Login Successful!"
+      console.log('User logged in:', response.data);
+  
+      // Redirect or update UI after login success
+      window.location.href = '/'; 
+    } catch (error) {
+      // Handle error response
+      if (error.response && error.response.status === 401) {
+        alert(error.response.data); // "Invalid credentials"
+      } else {
+        console.error('Unexpected error:', error);
+        alert('An unexpected error occurred. Please try again.');
+      }
+    }
   };
 
   return (
