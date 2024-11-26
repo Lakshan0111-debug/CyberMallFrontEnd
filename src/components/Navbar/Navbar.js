@@ -28,7 +28,7 @@ const Navbar = ({setShowLogin}) => {
         </div>
         <Link to='/logIn'><button>Sign Up</button></Link>
         <div className='profileImg'>
-          <Link to='/customerProfile/customerId'><Person2Outlined/></Link>
+          <Link to='/customerProfile/email'><Person2Outlined/></Link>
         </div>
       </div>
     </div>

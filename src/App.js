@@ -42,11 +42,11 @@ const router = createBrowserRouter([
     element: <ForgotPassword />
   },
   {
-    path: "/customerProfile/:customerId",
+    path: "/customerProfile/:email",
     element: <CustomerProfile />
   },
   {
-    path: "/customerProfile/:customerId/updateProfile",
+    path: "/customerProfile/:email/updateProfile",
     element: <EditCustomerProfile />
   },
   {

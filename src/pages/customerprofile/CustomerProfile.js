@@ -5,32 +5,33 @@ import Navbar from '../../components/Navbar/Navbar';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 
-const CustomerProfile = (customer) => {
-    const { customerId } = useParams();
+const CustomerProfile = () => {
+    const { email } = useParams(); // Assuming email is passed as a URL parameter
     const navigate = useNavigate();
 
     const [customerName, setCustomerName] = useState('');
-    const [email, setEmail] = useState('');
+    const [customerEmail, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
-    const [username, setUserName] = useState('');
+    const [userName, setUserName] = useState('');
     const [nic, setNic] = useState('');
     const [password, setPassword] = useState('');
 
     
     useEffect(() => {
+        console.log("Email from route:", email);
         loadCustomerDetails();
-    }, [customerId]);
+    }, [email]);
 
     async function loadCustomerDetails() {
         try {
-            const response = await axios.get(`http://localhost:8080/customers/${customerId}`);
+            const response = await axios.get(`http://localhost:8080/user/${email}`);
             const customerData = response.data;
             setCustomerName(customerData.customerName);
             setEmail(customerData.email);
             setPhoneNumber(customerData.phoneNumber);
             setAddress(customerData.address);
-            setUserName(customerData.username);
+            setUserName(customerData.userName);
             setNic(customerData.nic);
             setPassword(customerData.password);
         }
@@ -40,7 +41,7 @@ const CustomerProfile = (customer) => {
     }
 
     const handleEdit = () => {
-        navigate(`/manageCustomers/${customerId}/updateCustomer`); // Navigate to the Edit Product page
+        navigate(`/manageCustomers/${email}/updateCustomer`); // Navigate to the Edit Product page
     };
     
     return (
@@ -52,7 +53,7 @@ const CustomerProfile = (customer) => {
                 <div className="details">
                     <div className="detailItem">
                         <span className="itemKey">Username: </span>
-                        <span className="itemValue">{username}</span>
+                        <span className="itemValue">{userName}</span>
                     </div>
                     <div className="detailItem">
                         <span className="itemKey">Customer: </span>
