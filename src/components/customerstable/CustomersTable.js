@@ -11,9 +11,9 @@ const CustomersTable = () => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get("http://localhost:8080/customers");
-        const customersWithId = response.data.map((customer) => ({
+        const customersWithId = response.data.map((customer, index) => ({
           ...customer,
-          id: customer.customerId, // Ensure id is mapped correctly
+          id: customer.customerId || `temp-id-${index}`, // Use `customerId` or fallback
         }));
         setData(customersWithId);
       } catch (error) {
@@ -24,7 +24,7 @@ const CustomersTable = () => {
   }, []);
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this customers?")) {
+    if (window.confirm("Are you sure you want to delete this customer?")) {
       axios
         .delete(`http://localhost:8080/customers/${id}`)
         .then(() => {
@@ -36,8 +36,9 @@ const CustomersTable = () => {
         });
     }
   };
+
   const customerColumns = [
-    { field: "id", headerName: "Customer ID", width: 100 },
+    { field: "customerId", headerName: "Customer ID", width: 100 },
     {
       field: "customerName",
       headerName: "Customer",
@@ -53,21 +54,18 @@ const CustomersTable = () => {
       field: "action",
       headerName: "Action",
       width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            <Link to={`/manageCustomers/${params.row.id}`} style={{ textDecoration: "none" }}>
-              <div className="viewButton">VIEW</div>
-            </Link>
-            <div className="deleteButton" onClick={() => handleDelete(params.row.id)}>
-              DELETE
-            </div>
+      renderCell: (params) => (
+        <div className="cellAction">
+          <Link to={`/manageCustomers/${params.row.id}`} style={{ textDecoration: "none" }}>
+            <div className="viewButton">VIEW</div>
+          </Link>
+          <div className="deleteButton" onClick={() => handleDelete(params.row.id)}>
+            DELETE
           </div>
-        );
-      },
+        </div>
+      ),
     },
   ];
-    
 
   return (
     <div className="customersTable">
@@ -84,4 +82,5 @@ const CustomersTable = () => {
     </div>
   );
 };
+
 export default CustomersTable;

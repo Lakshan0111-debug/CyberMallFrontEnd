@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const AddNewProduct = () => {
-  const [imagePreview, setImagePreview] = useState(null); // Single preview
+  const [imagePreviews, setImagePreviews] = useState([]); // Array of previews
   const [formData, setFormData] = useState({
     productId: 0,
     productName: "",
@@ -20,20 +20,20 @@ const AddNewProduct = () => {
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const files = Array.from(e.target.files);
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-    if (!file) {
-      setImagePreview(null);
+    // Filter valid images
+    const validFiles = files.filter((file) => allowedTypes.includes(file.type));
+
+    if (validFiles.length > 4) {
+      alert("You can only upload up to 4 images.");
       return;
     }
 
-    if (!allowedTypes.includes(file.type)) {
-      alert(`Invalid file type: ${file.name}. Please upload JPEG or PNG images only.`);
-      return;
-    }
-
-    setImagePreview(URL.createObjectURL(file)); // Set single preview
+    // Create previews
+    const previews = validFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews); // Set previews
   };
 
   const handleInputChange = (e) => {
@@ -48,14 +48,19 @@ const AddNewProduct = () => {
     e.preventDefault();
 
     const data = new FormData();
-    const fileInput = e.target.fileInput.files[0];
+    const fileInput = e.target.fileInput.files;
 
-    if (!fileInput) {
-      alert("Please upload an image.");
+    if (!fileInput || fileInput.length === 0) {
+      alert("Please upload at least one image.");
       return;
     }
 
-    data.append("image", fileInput); // Append single file
+    // Append files
+    Array.from(fileInput).forEach((file, index) => {
+      if (index < 4) data.append("images", file); // Limit to 4 images
+    });
+
+    // Append form data
     data.append("productId", formData.productId);
     data.append("productName", formData.productName);
     data.append("description", formData.description);
@@ -78,7 +83,7 @@ const AddNewProduct = () => {
       alert("Failed to add product. Please try again.");
     }
 
-    setImagePreview(null); // Clear image preview
+    setImagePreviews([]); // Clear image previews
     setFormData({
       productId: 0,
       productName: "",
@@ -102,17 +107,19 @@ const AddNewProduct = () => {
         <div className="bottom">
           <div className="left">
             <div className="imageGrid">
-              {imagePreview && (
-                <div className="imageContainer">
+              {imagePreviews.map((preview, index) => (
+                <div className="imageContainer" key={index}>
                   <div className="imageWrapper">
-                    <img src={imagePreview} alt="Uploaded Preview" className="imagePreview" />
+                    <img src={preview} alt={`Uploaded Preview ${index + 1}`} className="imagePreview" />
                     <Close
                       className="removeIcon"
-                      onClick={() => setImagePreview(null)} // Clear preview
+                      onClick={() =>
+                        setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index))
+                      } // Remove preview
                     />
                   </div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
           <div className="right">
@@ -120,13 +127,14 @@ const AddNewProduct = () => {
               <div className="formInput">
                 <label htmlFor="fileInput" className="fileUploadLabel">
                   <DriveFolderUploadOutlined className="uploadIcon" />
-                  <span>Choose Image</span>
+                  <span>Choose Images (Up to 4)</span>
                 </label>
                 <input
                   type="file"
                   id="fileInput"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
+                  multiple
                 />
               </div>
               <div className="formInput">

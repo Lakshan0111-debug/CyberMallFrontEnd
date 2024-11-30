@@ -14,8 +14,7 @@ const ViewProduct = () => {
     const [supplierName, setSupplierName] = useState('');
     const [unitPrice, setUnitPrice] = useState('');
     const [quantity, setQuantity] = useState('');
-    const [filledImages, setFilledImages] = useState([]); // Define filledImages
-
+    const [filledImages, setFilledImages] = useState([]); 
     useEffect(() => {
         loadProductDetails();
     }, [productId]);
@@ -23,7 +22,7 @@ const ViewProduct = () => {
     async function loadProductDetails() {
         try {
             const response = await axios.get(`http://localhost:8080/products/search-product/${productId}`);
-            console.log("API Response:", response.data); // Log API response
+            console.log("API Response:", response.data);
 
             const productData = response.data;
 

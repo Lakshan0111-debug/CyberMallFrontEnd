@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AdminWidget.css";
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -7,9 +7,30 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import { Link } from 'react-router-dom';
 
 const AdminWidget = ({ type }) => {
+  const [amount, setAmount] = useState(0);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/counts');
+        switch(type) {
+          case "customers":
+            setAmount(response.data.noOfCustomers);
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+    
+    fetchData();
+  }, [type]);
 
   let data;
-  const amount = 500;
+
 
   switch (type) {
     case "customers":
